@@ -20,7 +20,7 @@ data class Network(val id: String, val name: String, val color: String, val twea
 class MainActivity : AppCompatActivity() {
 
     // Apne VPS ka IP yahan replace karein
-    private val SERVER_URL = "13.234.29.178:5000"
+    private val SERVER_URL = "94.237.70.217:5000"
     private val VPN_REQUEST_CODE = 1001
 
     private val networksList = mutableListOf<Network>()
