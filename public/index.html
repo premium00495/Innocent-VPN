@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Innocent Extreme VPN - Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #080a10; color: #fff; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+    .card { background: rgba(18, 22, 36, 0.9); border: 1px solid rgba(255,255,255,0.08); }
+  </style>
+</head>
+<body class="p-4 md:p-8">
+  <div class="max-w-6xl mx-auto space-y-6">
+    
+    <!-- Top Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-800 pb-4 gap-4">
+      <div>
+        <h1 class="text-2xl font-black tracking-wider text-purple-400">INNOCENT EXTREME VPN</h1>
+        <p class="text-xs text-gray-400">CENTRAL SERVER, NETWORKS &amp; USER CONTROLLER</p>
+      </div>
+      <span class="bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs px-3 py-1 rounded-full font-bold">API SERVER ONLINE</span>
+    </div>
+
+    <!-- 1. Support & Contact Settings -->
+    <div class="card p-6 rounded-2xl">
+      <h2 class="text-lg font-bold text-amber-400 mb-4 flex items-center gap-2">
+        <span>Support &amp; Handler Settings</span>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label class="text-xs font-semibold text-gray-400">WhatsApp Support Number</label>
+          <input id="whatsappInput" type="text" class="w-full mt-1 bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-sm text-white focus:outline-none focus:border-purple-500" placeholder="+923702534697">
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-gray-400">Telegram Admin Handle</label>
+          <input id="telegramInput" type="text" class="w-full mt-1 bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-sm text-white focus:outline-none focus:border-purple-500" placeholder="@ayazbagrani">
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-gray-400">Telegram Official Channel</label>
+          <input id="channelInput" type="text" class="w-full mt-1 bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-sm text-white focus:outline-none focus:border-purple-500" placeholder="https://t.me/ayazbagrani">
+        </div>
+      </div>
+      <button onclick="updateContacts()" class="mt-4 bg-purple-600 hover:bg-purple-700 px-6 py-2.5 rounded-lg font-bold text-sm tracking-wide transition-all shadow-lg shadow-purple-600/30">
+        Save Contacts
+      </button>
+    </div>
+
+    <!-- 2. Create User / Trial Code Generator -->
+    <div class="card p-6 rounded-2xl">
+      <h2 class="text-lg font-bold text-purple-400 mb-4">Generate Paid / Trial Access Key</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div>
+          <label class="text-xs font-semibold text-gray-400">Client / Username</label>
+          <input id="userName" type="text" class="w-full mt-1 bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-sm text-white focus:outline-none focus:border-purple-500" placeholder="e.g. Javed Khan">
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-gray-400">Plan Type</label>
+          <select id="accType" class="w-full mt-1 bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-sm text-white focus:outline-none focus:border-purple-500">
+            <option value="PAID">PAID (VIP User)</option>
+            <option value="TRIAL">TRIAL (Free Access)</option>
+            <option value="FREE">FREE USER</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-gray-400">Total Quota (GB)</label>
+          <input id="quotaGB" type="number" class="w-full mt-1 bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-sm text-white focus:outline-none focus:border-purple-500" value="300">
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-gray-400">Duration (Hours)</label>
+          <input id="durationHours" type="number" class="w-full mt-1 bg-gray-900 border border-gray-700 p-2.5 rounded-lg text-sm text-white focus:outline-none focus:border-purple-500" value="720">
+        </div>
+      </div>
+      <button onclick="createUser()" class="mt-4 bg-emerald-600 hover:bg-emerald-700 px-6 py-2.5 rounded-lg font-bold text-sm tracking-wide transition-all shadow-lg shadow-emerald-600/30">
+        Generate Key / Code
+      </button>
+    </div>
+
+    <!-- 3. Active Users & Data Tracking Table -->
+    <div class="card p-6 rounded-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold text-gray-200">Active Accounts &amp; Live Quota Monitor</h2>
+        <button onclick="loadData()" class="text-xs bg-gray-800 hover:bg-gray-700 px-3 py-1.5 rounded-md border border-gray-700 font-semibold">Refresh</button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm text-gray-400">
+          <thead class="text-xs uppercase bg-gray-900/80 text-gray-300 border-b border-gray-800">
+            <tr>
+              <th class="p-3">Client</th>
+              <th class="p-3">Access Code</th>
+              <th class="p-3">Type</th>
+              <th class="p-3">Used / Total GB</th>
+              <th class="p-3">Expires At</th>
+              <th class="p-3">Status</th>
+            </tr>
+          </thead>
+          <tbody id="userTableBody">
+            <tr>
+              <td colspan="6" class="p-4 text-center text-gray-500">Loading accounts...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    async function loadData() {
+      try {
+        const confRes = await fetch('/api/config');
+        const confData = await confRes.json();
+        if (confData.success) {
+          document.getElementById('whatsappInput').value = confData.data.whatsappNumber || '';
+          document.getElementById('telegramInput').value = confData.data.telegramHandle || '';
+          document.getElementById('channelInput').value = confData.data.telegramChannel || '';
+        }
+
+        const usersRes = await fetch('/api/admin/users');
+        const usersData = await usersRes.json();
+        const tbody = document.getElementById('userTableBody');
+        tbody.innerHTML = '';
+
+        if (!usersData.users || usersData.users.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-gray-500">Abhi tak koi user nahi banaya gaya.</td></tr>';
+          return;
+        }
+
+        usersData.users.forEach(u => {
+          const typeBadge = u.accountType === 'PAID' 
+            ? '<span class="bg-purple-950 text-purple-300 border border-purple-800 text-xs px-2 py-0.5 rounded font-bold">PAID</span>'
+            : '<span class="bg-gray-800 text-gray-300 border border-gray-700 text-xs px-2 py-0.5 rounded font-bold">TRIAL</span>';
+
+          tbody.innerHTML += `
+            <tr class="border-b border-gray-800/60 hover:bg-gray-800/30 transition-colors">
+              <td class="p-3 text-white font-medium">${u.name}</td>
+              <td class="p-3 text-amber-400 font-mono font-bold tracking-wider">${u.code}</td>
+              <td class="p-3">${typeBadge}</td>
+              <td class="p-3 text-gray-200">${u.usedGB} / ${u.totalGB} GB</td>
+              <td class="p-3 text-xs text-gray-400">${new Date(u.expiresAt).toLocaleDateString()}</td>
+              <td class="p-3 text-emerald-400 font-bold">${u.status}</td>
+            </tr>
+          `;
+        });
+      } catch (err) {
+        console.error("Data load error:", err);
+      }
+    }
+
+    async function updateContacts() {
+      const payload = {
+        whatsappNumber: document.getElementById('whatsappInput').value,
+        telegramHandle: document.getElementById('telegramInput').value,
+        telegramChannel: document.getElementById('channelInput').value
+      };
+
+      try {
+        const res = await fetch('/api/admin/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('Contacts Settings kamyabi se save ho gayi!');
+        }
+      } catch (err) {
+        alert('Contacts update fail: ' + err.message);
+      }
+    }
+
+    async function createUser() {
+      const name = document.getElementById('userName').value.trim();
+      const accountType = document.getElementById('accType').value;
+      const quotaGB = document.getElementById('quotaGB').value;
+      const durationHours = document.getElementById('durationHours').value;
+
+      if (!name) {
+        alert('Baraye meharbani client ka naam enter karein!');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/admin/create-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, accountType, quotaGB, durationHours })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert(`Naya Account Ready!\n\nCode: ${data.user.code}\nTier: ${data.user.accountType}`);
+          document.getElementById('userName').value = '';
+          loadData();
+        }
+      } catch (err) {
+        alert('Account creation fail: ' + err.message);
+      }
+    }
+
+    window.onload = loadData;
+  </script>
+</body>
+</html>
